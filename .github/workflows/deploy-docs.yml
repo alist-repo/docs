@@ -6,10 +6,12 @@ on:
     branches:
       # make sure this is the branch you are using
       - main
+  workflow_dispatch:
 
 jobs:
   deploy-gh-pages:
     runs-on: ubuntu-latest
+    # runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -22,14 +24,14 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 7
+          version: 9
           run_install: true
 
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: pnpm
 
       - name: Install Deps
@@ -42,12 +44,19 @@ jobs:
           pnpm run docs:build
           > docs/.vuepress/dist/.nojekyll
 
+      # - name: Deploy GitHub Page Repo
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     personal_token: ${{ secrets.MY_TOKEN }}
+      #     external_repository: alist-repo/alist-repo.github.com
+      #     publish_branch: gh-pages
+      #     publish_dir: docs/.vuepress/dist
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
+          # github_token: ${{ secrets.GITHUB_TOKEN }}
           personal_token: ${{ secrets.MY_TOKEN }}
-          # external_repository: alist-org/alist-org.github.io
           publish_branch: gh-pages
           publish_dir: docs/.vuepress/dist
-          cname: alist.nn.ci
 
