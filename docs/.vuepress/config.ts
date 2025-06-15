@@ -7,7 +7,7 @@ const __dirname = getDirname(import.meta.url);
 
 export default defineUserConfig({
   theme,
-  base: "/",
+  base: process.env.NODE_ENV === 'development' ? "/" : "/docs/",
   head: [
     [
       "script",
